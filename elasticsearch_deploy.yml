@@ -1,0 +1,60 @@
+---
+- name: Create es_tar directory
+  hosts: servers
+  become: yes
+  vars_files:
+    - /data/work/elasticsearch_8.4.2_ansible/main.yml
+  tasks:
+    - name: Create es_tar directory
+      file:
+        path: "{{ es_tar_path }}"
+        state: directory
+
+    - name: Create work directory
+      file:
+        path: "{{ work_dir }}"
+        state: directory
+
+
+- name: Copy es_tar to servers
+  hosts: localhost
+  become: yes
+  vars_files:
+    - /data/work/elasticsearch_8.4.2_ansible/main.yml
+  tasks:
+    - name: tar_scp.sh Start
+      shell: "{{ play_book_dir }}/tar_scp.sh {{ play_book_dir }} {{ es_tar_path }}"
+
+
+- name: Extract es_tar
+  hosts: servers
+  become: yes
+  vars_files:
+    - /data/work/elasticsearch_8.4.2_ansible/main.yml
+  tasks:
+    - name: Extract the elasticsearch tarball
+      unarchive:
+        src: "{{ es_tar_path }}/{{ es_tar_filename }}"
+        dest: "{{ work_dir }}"
+        remote_src: yes
+
+
+- name: sb_link
+  hosts: servers
+  become: yes
+  vars_files:
+    - /data/work/elasticsearch_8.4.2_ansible/main.yml
+  tasks:
+    - name: elasticsearch link gogo
+      shell: "ln -s {{ work_dir }}/*elasticsearch-?.?.?* {{ work_dir }}/elasticsearch"
+      args:
+        creates: "{{ work_dir }}/elasticsearch"
+
+- name: entrypoint_sh start
+  hosts: localhost
+  become: yes
+  vars_files:
+    - /data/work/elasticsearch_8.4.2_ansible/main.yml
+  tasks:
+    - name: entry_point_sh start
+      shell: "{{ play_book_dir }}/entrypoint.sh"

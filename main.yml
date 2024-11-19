@@ -1,0 +1,4 @@
+es_tar_path: "/data/download_tar"
+es_tar_filename: "elasticsearch-8.4.2-linux-x86_64.tar.gz"
+work_dir: "/data/sy0218"
+play_book_dir: "/data/work/elasticsearch_8.4.2_ansible"
