@@ -20,6 +20,7 @@
 [http.port]|9200
 [discovery.seed_hosts]|["sy0218-control1","sy0218-node1","sy0218-data1"]
 [cluster.initial_master_nodes]|["sy0218-control1","sy0218-node1"]
+[xpack.security.enabled]|false
 -----------------------[elasticsearch.yml-end]-----------------------
 
 -----------------------[jvm.options-start]-----------------------
